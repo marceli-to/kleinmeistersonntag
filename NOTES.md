@@ -1,6 +1,6 @@
 # Kleinmeistersonntag – Notes
 
-Design: `Kleinmeistersonntag_261113.pdf` (12 pages, desktop 1600px, mobile 320px).
+Design: `.data/Kleinmeistersonntag_261113.pdf` (12 pages, desktop 1600px, mobile 320px).
 
 ## Fonts
 
