@@ -1,0 +1,44 @@
+{
+  "resources/css/app.css": {
+    "file": "assets/app-2Rv1ctEQ.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "assets": [
+      "assets/Muoto-Regular-BtBnoWr3.woff2",
+      "assets/Muoto-Italic-D3q28e0a.woff2",
+      "assets/Muoto-Medium-CFuTjOPF.woff2",
+      "assets/Muoto-Bold-Dv1um6wQ.woff2",
+      "assets/ABCOtto-Medium-DphYHlgK.woff2"
+    ]
+  },
+  "resources/fonts/ABCOtto-Medium.woff2": {
+    "file": "assets/ABCOtto-Medium-DphYHlgK.woff2",
+    "src": "resources/fonts/ABCOtto-Medium.woff2"
+  },
+  "resources/fonts/Muoto-Bold.woff2": {
+    "file": "assets/Muoto-Bold-Dv1um6wQ.woff2",
+    "src": "resources/fonts/Muoto-Bold.woff2"
+  },
+  "resources/fonts/Muoto-Italic.woff2": {
+    "file": "assets/Muoto-Italic-D3q28e0a.woff2",
+    "src": "resources/fonts/Muoto-Italic.woff2"
+  },
+  "resources/fonts/Muoto-Medium.woff2": {
+    "file": "assets/Muoto-Medium-CFuTjOPF.woff2",
+    "src": "resources/fonts/Muoto-Medium.woff2"
+  },
+  "resources/fonts/Muoto-Regular.woff2": {
+    "file": "assets/Muoto-Regular-BtBnoWr3.woff2",
+    "src": "resources/fonts/Muoto-Regular.woff2"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Cbh_hF4r.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  }
+}

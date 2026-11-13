@@ -1,0 +1,71 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+@source '../js/**/*.vue';
+@source '../views/**/*.blade.php';
+
+@theme {
+	/* 1 spacing unit = 1px (as rem), so px-12 = 12px */
+	--spacing: 0.0625rem;
+
+	/* Colors */
+	--color-*: initial;
+	--color-white: #fff;
+	--color-black: #000;
+	--color-olive: #505028;
+	--color-olive-light: #b4b49f;
+	--color-orange: #e65000;
+	--color-transparent: transparent;
+	--color-current: currentColor;
+
+	/* Fonts */
+	--font-*: initial;
+	--font-sans: 'Muoto', ui-sans-serif, system-ui, sans-serif;
+	--font-serif: 'ABC Otto', ui-serif, Georgia, serif;
+
+	/* Font scale (no base) */
+	--text-*: initial;
+	--text-xs: 0.6875rem;     /* 11px – labels */
+	--text-xs--line-height: 1rem;
+	--text-xs--letter-spacing: 0.06em;
+	--text-sm: 0.9375rem;     /* 15px – body, inputs, buttons */
+	--text-sm--line-height: 1.25rem;
+	--text-sm--letter-spacing: 0.0375em;
+	--text-lg: 1.4375rem;     /* 23px – title (mobile) */
+	--text-lg--line-height: 1.75rem;
+	--text-lg--letter-spacing: 0.01em;
+	--text-xl: 2.5rem;        /* 40px – title */
+	--text-xl--line-height: 3rem;
+	--text-xl--letter-spacing: 0.01em;
+
+	/* Content column: 4 desktop grid columns (4 × 116 + 3 × 16) */
+	--container-content: 32rem; /* 512px */
+}
+
+@layer base {
+	html {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	body {
+		@apply bg-white font-sans text-sm text-olive;
+	}
+
+	button {
+		cursor: pointer;
+	}
+}
+
+/*
+ * Page frame: mobile 32px side padding. From md on the content starts at
+ * grid column 2 of a 12-column grid (16px margin, 16px gutters).
+ */
+@utility page-frame {
+	padding-inline: calc(var(--spacing) * 32);
+
+	@media (width >= 48rem) {
+		padding-left: calc((100% - 13rem) / 12 + 2rem);
+		padding-right: 1rem;
+	}
+}
