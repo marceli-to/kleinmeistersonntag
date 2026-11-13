@@ -26,7 +26,7 @@ onBeforeUnmount(() => {
 			class="fixed inset-0 z-50 overflow-y-auto bg-white/80"
 			@mousedown.self="emit('close')"
 		>
-			<div class="page-frame pointer-events-none py-32 md:pt-160">
+			<div class="page-frame pointer-events-none flex min-h-full flex-col justify-center py-32">
 				<div class="max-w-content">
 					<div
 						role="dialog"

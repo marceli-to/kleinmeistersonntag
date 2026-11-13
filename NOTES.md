@@ -60,3 +60,5 @@ doesn't reset passwords. To reset one: delete the user, then `php artisan db:see
   the admin enters.
 - **Modal backdrop**: the page behind fades to ~80% white (estimated from the PDF rendering).
 - No success message after saving (not designed) – the entry simply appears in the list.
+- **Modal position**: vertically centred in the viewport (as on p. 11 and 12). P. 8 sits higher – treated as an
+  inconsistency in the design.
