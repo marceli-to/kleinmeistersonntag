@@ -8,6 +8,7 @@ use App\Http\Resources\AttendeeResource;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -19,7 +20,12 @@ class EventController extends Controller
 
 		return Inertia::render('Event/Show', [
 			'event' => new EventResource($event),
-			'attendees' => AttendeeResource::collection($event->attendees),
+			// Alphabetical by last name (A–Z), case- and accent-insensitive
+			'attendees' => AttendeeResource::collection(
+				$event->attendees->sortBy(
+					fn ($attendee) => Str::lower(Str::ascii($attendee->lastname.' '.$attendee->firstname))
+				)->values()
+			),
 		]);
 	}
 

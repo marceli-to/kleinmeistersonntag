@@ -103,7 +103,7 @@ function logout() {
 				/>
 			</div>
 
-			<BaseButton class="mt-32" @click="addPerson">Person hinzufügen</BaseButton>
+			<BaseButton class="mt-32" @click="addPerson">Weitere Person hinzufügen</BaseButton>
 
 			<AnswerFields
 				v-model="form.attending"
