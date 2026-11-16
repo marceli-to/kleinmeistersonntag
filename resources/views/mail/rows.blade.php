@@ -7,7 +7,7 @@
 			@if ($withEmail)
 				<td style="{{ $cell }}"><a href="mailto:{{ $attendee->email }}" style="color: #505028; text-decoration: none;">{{ $attendee->email }}</a></td>
 			@endif
-			<td align="right" style="{{ $cell }} padding-right: 8px; white-space: nowrap;">{{ $attendee->attending ? 'Ja gerne' : 'Leider nein' }}</td>
+			<td align="right" style="{{ $cell }} padding-right: 0; white-space: nowrap;">{{ $attendee->attending ? 'Ja gerne' : 'Leider nein' }}</td>
 		</tr>
 	@endforeach
 </table>

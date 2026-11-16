@@ -16,11 +16,11 @@
 			<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 				<tr>
 					<td style="height: 28px; border-top: 1px solid #505028;">Zugesagt</td>
-					<td align="right" style="height: 28px; border-top: 1px solid #505028; padding-right: 8px;">{{ $accepted }}</td>
+					<td align="right" style="height: 28px; border-top: 1px solid #505028;">{{ $accepted }}</td>
 				</tr>
 				<tr>
 					<td style="height: 28px; border-top: 1px solid #b4b49f; border-bottom: 1px solid #505028;">Abgesagt</td>
-					<td align="right" style="height: 28px; border-top: 1px solid #b4b49f; border-bottom: 1px solid #505028; padding-right: 8px;">{{ $declined }}</td>
+					<td align="right" style="height: 28px; border-top: 1px solid #b4b49f; border-bottom: 1px solid #505028;">{{ $declined }}</td>
 				</tr>
 			</table>
 		</td>
