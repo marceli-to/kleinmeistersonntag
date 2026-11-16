@@ -148,6 +148,9 @@ when empty), flush.
   weihnachtsessen@wbg.ch (login verified), `MAIL_TO="ms@wbg.ch"`, cron for `schedule:run`, admins seeded
 - [x] Favicon from the client (`public/favicon.svg`, line-art "26", olive) + `favicon.ico` (16/32/48) and
   `apple-touch-icon.png` (180, on white), linked in `resources/views/app.blade.php` (2026-11-16, `84b617a`)
+- [x] All commits up to `dff3a83` deployed with `./deploy.sh` (2026-11-16)
+- [x] Client feedback 2026-11-16: button «Weitere Person hinzufügen», attendee lists sorted by last name A–Z
+  (`bb222db`, not yet deployed). Non-breaking spaces in the header dropped – it's admin-edited content
 
 ## Open questions / not designed (decisions taken – see `NOTES.md`)
 
@@ -164,8 +167,6 @@ when empty), flush.
 ## Possible next steps
 
 - Clarify the open questions above with the client
-- Deploy the latest commits (list fix, flush command, email layout, favicon) with `./deploy.sh` – live was last repaired by
-  hand on 2026-11-16 and may still run an older commit
 - Test on live: sign up with a real address, check confirmation email + edit link, run the digest by hand,
   then `attendees:flush` before handing over
 - Remove `attendees:flush` once real guests sign up
