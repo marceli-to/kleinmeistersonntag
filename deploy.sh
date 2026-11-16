@@ -57,20 +57,22 @@ rsync -az --delete \
 
 if ! ssh "$HOST" "test -f '$DEST/.env'"; then
   echo "First deploy: creating .env, database, admins and scheduler cron…"
-  ssh "$HOST" "cd '$DEST' && cp .env.example .env && sed -i \
-      -e 's|^APP_ENV=.*|APP_ENV=production|' \
-      -e 's|^APP_DEBUG=.*|APP_DEBUG=false|' \
-      -e 's|^APP_URL=.*|APP_URL=$URL|' \
-      -e 's|^LOG_LEVEL=.*|LOG_LEVEL=warning|' \
-      -e 's|^MAIL_MAILER=.*|MAIL_MAILER=log|' \
-      -e 's|^MAIL_HOST=.*|MAIL_HOST=asmtp.mail.hostpoint.ch|' \
-      -e 's|^MAIL_PORT=.*|MAIL_PORT=587|' \
-      -e 's|^MAIL_USERNAME=.*|MAIL_USERNAME=weihnachtsessen@wbg.ch|' \
-      .env \
-    && chmod 600 .env \
-    && $REMOTE_PHP artisan key:generate --force >/dev/null \
-    && touch database/database.sqlite \
-    && $REMOTE_PHP artisan migrate --seed --force"
+  # The server runs FreeBSD: no GNU 'sed -i', so write the result to .env instead.
+  # If any step fails, .env is removed again so the next run retries the whole setup.
+  ssh "$HOST" "cd '$DEST' && { sed \\
+      -e 's|^APP_ENV=.*|APP_ENV=production|' \\
+      -e 's|^APP_DEBUG=.*|APP_DEBUG=false|' \\
+      -e 's|^APP_URL=.*|APP_URL=$URL|' \\
+      -e 's|^LOG_LEVEL=.*|LOG_LEVEL=warning|' \\
+      -e 's|^MAIL_MAILER=.*|MAIL_MAILER=log|' \\
+      -e 's|^MAIL_HOST=.*|MAIL_HOST=asmtp.mail.hostpoint.ch|' \\
+      -e 's|^MAIL_PORT=.*|MAIL_PORT=587|' \\
+      -e 's|^MAIL_USERNAME=.*|MAIL_USERNAME=weihnachtsessen@wbg.ch|' \\
+      .env.example > .env \\
+    && chmod 600 .env \\
+    && $REMOTE_PHP artisan key:generate --force >/dev/null \\
+    && touch database/database.sqlite \\
+    && $REMOTE_PHP artisan migrate --seed --force; } || { rm -f .env; exit 1; }"
   CRON="* * * * * cd $DEST && $REMOTE_PHP artisan schedule:run >> /dev/null 2>&1"
   ssh "$HOST" "crontab -l 2>/dev/null | grep -qF '$DEST' || (crontab -l 2>/dev/null; echo '$CRON') | crontab -"
   echo

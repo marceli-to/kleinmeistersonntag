@@ -44,6 +44,12 @@ default CLI PHP is 8.3). The first run creates the production `.env` (Hostpoint 
 mail = log until `MAIL_MAILER=smtp` and `MAIL_PASSWORD` are set),
 the SQLite DB, the admins (passwords printed once) and the `schedule:run` cron line.
 
+## Testing on live
+
+`php artisan attendees:flush` deletes all entries (keeps the event and the admins), with a confirmation;
+`--force` skips it. On the server: `cd ~/www/weihnachtsessen.wbg.ch && /usr/local/php84/bin/php artisan attendees:flush`.
+Meant for testing before go-live – remove the command once real guests sign up.
+
 ## Emails
 
 - **Confirmation** (`App\Mail\AttendeeConfirmation`): sent synchronously on signup, one email per distinct

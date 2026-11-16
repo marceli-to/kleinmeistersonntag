@@ -120,6 +120,7 @@ function logout() {
 			:attendees="accepted"
 			attending
 			show-total
+			first
 			@edit="editingAttendee = $event"
 		/>
 
@@ -127,6 +128,7 @@ function logout() {
 			title="Bisher haben abgesagt"
 			:attendees="declined"
 			:attending="false"
+			:first="!accepted.length"
 			@edit="editingAttendee = $event"
 		/>
 

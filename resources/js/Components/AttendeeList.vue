@@ -8,13 +8,15 @@ defineProps({
 	attendees: { type: Array, required: true },
 	attending: { type: Boolean, required: true },
 	showTotal: { type: Boolean, default: false },
+	// First visible list below the form gets the larger gap
+	first: { type: Boolean, default: false },
 });
 
 defineEmits(['edit']);
 </script>
 
 <template>
-	<section v-if="showTotal || attendees.length" :class="showTotal ? 'mt-40' : 'mt-28'">
+	<section v-if="attendees.length" :class="first ? 'mt-40' : 'mt-28'">
 		<h2 class="mb-4 text-xs font-bold">{{ title }}</h2>
 		<ul>
 			<li
