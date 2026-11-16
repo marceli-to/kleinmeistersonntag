@@ -43,6 +43,8 @@ web root `public/`), based on the kimiyuch deploy scripts. PHP 8.4 everywhere: H
 default CLI PHP is 8.3). The first run creates the production `.env` (Hostpoint SMTP as weihnachtsessen@wbg.ch;
 mail = log until `MAIL_MAILER=smtp` and `MAIL_PASSWORD` are set),
 the SQLite DB, the admins (passwords printed once) and the `schedule:run` cron line.
+The server runs **FreeBSD** (BSD tools: no GNU `sed -i`, use `sha1sum`/`sed … > file`). Mail login via
+`asmtp.mail.hostpoint.ch:587` with the mailbox weihnachtsessen@wbg.ch; the password lives only in the server `.env`.
 
 ## Testing on live
 

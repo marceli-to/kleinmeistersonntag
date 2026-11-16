@@ -1,6 +1,6 @@
 # Kleinmeistersonntag – Progress
 
-Handoff document for continuing in a new session. Status as of **2026-11-13**.
+Handoff document for continuing in a new session. Status as of **2026-11-16**.
 See also `NOTES.md` (setup, conventions, design deviations).
 
 ## What this is
@@ -10,7 +10,9 @@ Guests sign up (one or more persons, yes/no), see who's coming, and can edit the
 Admins log in and can edit/delete all entries and edit the event text.
 
 - Repo: https://github.com/marceli-to/kleinmeistersonntag (branch `main`)
-- Local: http://kleinmeistersonntag.test (Laravel Herd), SQLite
+- Live: https://weihnachtsessen.wbg.ch (Hostpoint, `wbgch18@wbg.ch`, deploy with `./deploy.sh`)
+- Local: https://kleinmeistersonntag.test (Laravel Herd, PHP 8.4 isolated → use `herd php artisan …`), SQLite,
+  mail to MailHog (http://localhost:8025)
 - Design: `.data/Kleinmeistersonntag_261113.pdf` (12 pages)
 
 ## Stack
@@ -97,6 +99,7 @@ No login for guests. Each submission gets a random 64-char token, stored in the 
 | PUT | `/attendees/{attendee}` | owner (cookie) or admin – `AttendeePolicy` |
 | DELETE | `/attendees/{attendee}` | admin |
 | PUT | `/events/{event}` | admin |
+| GET | `/eintrag/{attendee}/bearbeiten` | signed link from the confirmation email (deleted entry → `/`) |
 | GET/POST | `/login` | guests; POST `/logout` for admins |
 
 ### Key files
@@ -104,6 +107,9 @@ No login for guests. Each submission gets a random 64-char token, stored in the 
 - Requests: `app/Http/Requests/{Attendee,Event,Auth}/*`
 - Resources: `AttendeeResource` (name, attending, own, editable; email/first/lastname only if editable), `EventResource` (+ link)
 - Controllers: `EventController`, `AttendeeController`, `Auth/SessionController`
+- Mail: `app/Mail/{AttendeeConfirmation,DailyDigest}`, views `resources/views/mail/*`, `EditLinkController`
+- Commands: `attendees:digest` (daily 18:00, `routes/console.php`), `attendees:flush` (testing only)
+- Config: `config/kleinmeistersonntag.php` (`MAIL_TO`, digest time, timezone)
 - German validation messages: `lang/de/validation.php`, `lang/de/auth.php` (`APP_LOCALE=de`)
 - Vue: `Pages/Event/Show.vue`, `Pages/Auth/Login.vue`, `Components/{PersonFields,AnswerFields,AttendeeList,EventHeader,EditAttendeeModal,EditEventModal,Modal,BaseButton}`, `Components/Form/*`, `Components/Icons/*`
 
@@ -111,16 +117,17 @@ No login for guests. Each submission gets a random 64-char token, stored in the 
 `database/seeders/AdminSeeder.php` creates **Marcel Stadelmann (m@marceli.to)** and **Benedikt Flüeler (bf@wbg.ch)**
 with random passwords in the format `XXXX-XXXX-XXXX-XXXX` (uppercase letters), printed once in the seeder output.
 Existing admins are never touched (re-seeding doesn't reset passwords). Reset = delete the user + re-run the seeder.
-Local passwords were generated on 2026-11-13 and handed over in the chat (not stored anywhere in plain text).
-On the server, `php artisan migrate --seed` creates them again with new passwords.
+Local passwords were generated on 2026-11-13, live passwords on 2026-11-16; both handed over in the chat
+(not stored anywhere in plain text).
 
 `DatabaseSeeder`: creates the event if none exists, calls `AdminSeeder`, and `DemoSeeder` (placeholder guests from
 the PDF) only when `APP_ENV=local`.
 
 ### Tests
-`php artisan test` – 12 tests: page props/privacy, multi-person signup + cookie, validation, own-entry editing,
-guests can't edit/delete others, admin edit/delete, event update permissions, login/logout, admin seeder
-(password format, never resets).
+`herd php artisan test --testsuite=Feature` (there is no `tests/Unit`) – 23 tests: page props/privacy, multi-person
+signup + cookie, validation, own-entry editing, guests can't edit/delete others, admin edit/delete, event update
+permissions, login/logout, admin seeder, confirmation mails + signed edit link, digest (window, recipients, skip
+when empty), flush.
 
 ## Done
 
@@ -133,7 +140,12 @@ guests can't edit/delete others, admin edit/delete, event update permissions, lo
 - [x] Admin seeder (2 admins, random passwords)
 - [x] Feature tests
 - [x] Pushed to GitHub (initial commit `e40dd44`)
-- [x] Confirmation email with "Eintrag bearbeiten" link (opens the edit modal) + daily 18:00 digest to the owner
+- [x] Confirmation email with "Eintrag bearbeiten" link (opens the edit modal) + daily 18:00 digest to `MAIL_TO`
+- [x] Emails styled like the page (Inter, white, left-aligned, single-line rows, answers flush right)
+- [x] Empty attendee lists are hidden ("zugesagt" incl. Total only shows with entries)
+- [x] `attendees:flush` for testing on live
+- [x] `deploy.sh` + live on https://weihnachtsessen.wbg.ch (2026-11-16): production `.env`, Hostpoint SMTP as
+  weihnachtsessen@wbg.ch (login verified), `MAIL_TO="ms@wbg.ch"`, cron for `schedule:run`, admins seeded
 
 ## Open questions / not designed (decisions taken – see `NOTES.md`)
 
@@ -150,6 +162,12 @@ guests can't edit/delete others, admin edit/delete, event update permissions, lo
 ## Possible next steps
 
 - Clarify the open questions above with the client
-- First deploy with `./deploy.sh` (sets up .env, DB, admins, cron), then add the SMTP credentials to the server's .env
+- Deploy the latest commits (list fix, flush command, email layout) with `./deploy.sh` – live was last repaired by
+  hand on 2026-11-16 and may still run an older commit
+- Test on live: sign up with a real address, check confirmation email + edit link, run the digest by hand,
+  then `attendees:flush` before handing over
+- Remove `attendees:flush` once real guests sign up
+- Decide whether `MAIL_TO` stays ms@wbg.ch or goes to bf@wbg.ch; optionally Reply-To on confirmations
+- The first-run part of `deploy.sh` was fixed for FreeBSD but not re-tested on a fresh install
 - Optional: CSV export for admins, closing registration after a deadline
 - Laravel's default `AGENTS.md` / `CLAUDE.md` (Boost guidelines) are in the repo unchanged – replace or remove
