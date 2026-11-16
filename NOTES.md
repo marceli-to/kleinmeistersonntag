@@ -68,6 +68,20 @@ Meant for testing before go-live – remove the command once real guests sign up
 - Local: MailHog (`MAIL_MAILER=smtp`, port 1025, UI http://localhost:8025).
 - Local PHP: the site is isolated to PHP 8.4 in Herd (lock file needs >= 8.4.1), so use `herd php artisan …`.
 
+## Favicon
+
+`public/favicon.svg` is the client's file, unchanged (512×512, fill #505028 set on the paths).
+`favicon.ico` (16/32/48) and `apple-touch-icon.png` (180×180, white background) are made from it with ImageMagick:
+
+```bash
+magick -background none -density 144 public/favicon.svg -resize 256x256 /tmp/fav.png
+magick /tmp/fav.png -define icon:auto-resize=48,32,16 public/favicon.ico
+magick /tmp/fav.png -resize 180x180 -background white -flatten public/apple-touch-icon.png
+```
+
+ImageMagick's built-in SVG renderer is unreliable (ignores `<style>` classes, the first client SVG came out as a
+black blob) – compare the result with `qlmanage -t -s 256 -o /tmp public/favicon.svg` (macOS WebKit render).
+
 ## Tailwind conventions
 
 - Spacing: 1 unit = 1px (`--spacing: 0.0625rem`), so `px-12` = 12px.

@@ -146,6 +146,8 @@ when empty), flush.
 - [x] `attendees:flush` for testing on live
 - [x] `deploy.sh` + live on https://weihnachtsessen.wbg.ch (2026-11-16): production `.env`, Hostpoint SMTP as
   weihnachtsessen@wbg.ch (login verified), `MAIL_TO="ms@wbg.ch"`, cron for `schedule:run`, admins seeded
+- [x] Favicon from the client (`public/favicon.svg`, line-art "26", olive) + `favicon.ico` (16/32/48) and
+  `apple-touch-icon.png` (180, on white), linked in `resources/views/app.blade.php` (2026-11-16, `84b617a`)
 
 ## Open questions / not designed (decisions taken – see `NOTES.md`)
 
@@ -162,12 +164,14 @@ when empty), flush.
 ## Possible next steps
 
 - Clarify the open questions above with the client
-- Deploy the latest commits (list fix, flush command, email layout) with `./deploy.sh` – live was last repaired by
+- Deploy the latest commits (list fix, flush command, email layout, favicon) with `./deploy.sh` – live was last repaired by
   hand on 2026-11-16 and may still run an older commit
 - Test on live: sign up with a real address, check confirmation email + edit link, run the digest by hand,
   then `attendees:flush` before handing over
 - Remove `attendees:flush` once real guests sign up
 - Decide whether `MAIL_TO` stays ms@wbg.ch or goes to bf@wbg.ch; optionally Reply-To on confirmations
 - The first-run part of `deploy.sh` was fixed for FreeBSD but not re-tested on a fresh install
+- Check the favicon in a real browser tab: the fine lines blur at 16–32px; if too faint, ask the client for a
+  simplified small-size version
 - Optional: CSV export for admins, closing registration after a deadline
 - Laravel's default `AGENTS.md` / `CLAUDE.md` (Boost guidelines) are in the repo unchanged – replace or remove
