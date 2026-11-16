@@ -22,6 +22,8 @@ class HandleInertiaRequests extends Middleware
 		return [
 			...parent::share($request),
 			'isAdmin' => $request->user() !== null,
+			// Set by the edit link in the confirmation email → opens the edit modal
+			'editAttendee' => fn () => $request->session()->get('editAttendee'),
 		];
 	}
 }

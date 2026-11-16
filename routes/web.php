@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendeeController;
 use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\EditLinkController;
 use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,11 @@ Route::post('/attendees', [AttendeeController::class, 'store'])
 Route::put('/attendees/{attendee}', [AttendeeController::class, 'update'])
 	->middleware('throttle:30,1')
 	->name('attendees.update');
+
+Route::get('/eintrag/{attendee}/bearbeiten', EditLinkController::class)
+	->middleware(['signed', 'throttle:30,1'])
+	->missing(fn () => redirect()->route('event.show')) // entry deleted meanwhile
+	->name('attendees.edit');
 
 Route::middleware('guest')->group(function () {
 	Route::get('/login', [SessionController::class, 'create'])->name('login');

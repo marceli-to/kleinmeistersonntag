@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Head, router, useForm, usePage } from '@inertiajs/vue3';
 import AnswerFields from '@/Components/AnswerFields.vue';
 import AttendeeList from '@/Components/AttendeeList.vue';
@@ -58,6 +58,16 @@ function submit() {
 
 const editingAttendee = ref(null);
 const editingEvent = ref(false);
+
+// Opened via the "Eintrag bearbeiten" link in the confirmation email
+onMounted(() => {
+	const id = page.props.editAttendee;
+	const attendee = id ? props.attendees.find((a) => a.id === id && a.editable) : null;
+
+	if (attendee) {
+		editingAttendee.value = attendee;
+	}
+});
 
 function logout() {
 	router.post('/logout');

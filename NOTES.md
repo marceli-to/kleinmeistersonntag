@@ -35,6 +35,31 @@ doesn't reset passwords. To reset one: delete the user, then `php artisan db:see
 - `/` always shows the most recent event (`Event::current()`).
 - Emails are only sent to the browser for own entries or the admin.
 
+## Deploy
+
+`./deploy.sh` deploys the committed HEAD to https://weihnachtsessen.wbg.ch (`wbgch18@wbg.ch:~/www/weihnachtsessen.wbg.ch`,
+web root `public/`), based on the kimiyuch deploy scripts. PHP 8.4 everywhere: Herd's php84 locally,
+`/usr/local/php84/bin/php` on the server, and `Use php-fpm php84` in `public/.htaccess` for the web server (the server's
+default CLI PHP is 8.3). The first run creates the production `.env` (Hostpoint SMTP as weihnachtsessen@wbg.ch;
+mail = log until `MAIL_MAILER=smtp` and `MAIL_PASSWORD` are set),
+the SQLite DB, the admins (passwords printed once) and the `schedule:run` cron line.
+
+## Emails
+
+- **Confirmation** (`App\Mail\AttendeeConfirmation`): sent synchronously on signup, one email per distinct
+  address (persons sharing an address get one email). A mail failure is only reported and doesn't break the
+  signup. The "Eintrag bearbeiten" link is a signed URL with no expiry (`/eintrag/{id}/bearbeiten`). It adds the
+  entry's token to the cookie, so it also works on another device, then redirects to `/` with the
+  `editAttendee` flash value, which opens the edit modal.
+- **Daily digest** (`attendees:digest`, `App\Mail\DailyDigest`): scheduled daily at 18:00 Europe/Zurich in
+  `routes/console.php`. Lists the entries created in the last 24 h plus the current totals, sent to
+  `MAIL_TO` (default bf@wbg.ch, several addresses comma-separated). Nothing is sent when there are no new entries.
+  **Production needs the scheduler cron:** `* * * * * cd /path && php artisan schedule:run >> /dev/null 2>&1`.
+- Design: `resources/views/mail/*` with inline styles, white background, left-aligned, no header. Uses Inter
+  with a system fallback instead of Muoto/Otto. Page colors, 11px bold labels, hairline rows, outlined button.
+- Local: MailHog (`MAIL_MAILER=smtp`, port 1025, UI http://localhost:8025).
+- Local PHP: the site is isolated to PHP 8.4 in Herd (lock file needs >= 8.4.1), so use `herd php artisan …`.
+
 ## Tailwind conventions
 
 - Spacing: 1 unit = 1px (`--spacing: 0.0625rem`), so `px-12` = 12px.

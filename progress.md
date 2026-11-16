@@ -133,6 +133,7 @@ guests can't edit/delete others, admin edit/delete, event update permissions, lo
 - [x] Admin seeder (2 admins, random passwords)
 - [x] Feature tests
 - [x] Pushed to GitHub (initial commit `e40dd44`)
+- [x] Confirmation email with "Eintrag bearbeiten" link (opens the edit modal) + daily 18:00 digest to the owner
 
 ## Open questions / not designed (decisions taken – see `NOTES.md`)
 
@@ -148,8 +149,7 @@ guests can't edit/delete others, admin edit/delete, event update permissions, lo
 
 ## Possible next steps
 
-- Deploy to the server (`composer install --no-dev`, `.env` with `APP_ENV=production`, `APP_DEBUG=false`,
-  `APP_URL`; `php artisan key:generate`; `php artisan migrate --seed`; note the printed admin passwords)
 - Clarify the open questions above with the client
-- Optional: confirmation email to guests, CSV export for admins, closing registration after a deadline
+- First deploy with `./deploy.sh` (sets up .env, DB, admins, cron), then add the SMTP credentials to the server's .env
+- Optional: CSV export for admins, closing registration after a deadline
 - Laravel's default `AGENTS.md` / `CLAUDE.md` (Boost guidelines) are in the repo unchanged – replace or remove
