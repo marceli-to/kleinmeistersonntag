@@ -48,9 +48,8 @@ The server runs **FreeBSD** (BSD tools: no GNU `sed -i`, use `sha1sum`/`sed … 
 
 ## Testing on live
 
-`php artisan attendees:flush` deletes all entries (keeps the event and the admins), with a confirmation;
-`--force` skips it. On the server: `cd ~/www/weihnachtsessen.wbg.ch && /usr/local/php84/bin/php artisan attendees:flush`.
-Meant for testing before go-live – remove the command once real guests sign up.
+The `attendees:flush` command was used to clear test entries before go-live and removed afterwards
+(2026-11-16). Backup from before the flush on the server: `database/database.sqlite.bak-20261116-150037`.
 
 ## Emails
 

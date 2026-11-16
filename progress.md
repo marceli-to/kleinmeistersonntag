@@ -108,7 +108,7 @@ No login for guests. Each submission gets a random 64-char token, stored in the 
 - Resources: `AttendeeResource` (name, attending, own, editable; email/first/lastname only if editable), `EventResource` (+ link)
 - Controllers: `EventController`, `AttendeeController`, `Auth/SessionController`
 - Mail: `app/Mail/{AttendeeConfirmation,DailyDigest}`, views `resources/views/mail/*`, `EditLinkController`
-- Commands: `attendees:digest` (daily 18:00, `routes/console.php`), `attendees:flush` (testing only)
+- Commands: `attendees:digest` (daily 18:00, `routes/console.php`)
 - Config: `config/kleinmeistersonntag.php` (`MAIL_TO`, digest time, timezone)
 - German validation messages: `lang/de/validation.php`, `lang/de/auth.php` (`APP_LOCALE=de`)
 - Vue: `Pages/Event/Show.vue`, `Pages/Auth/Login.vue`, `Components/{PersonFields,AnswerFields,AttendeeList,EventHeader,EditAttendeeModal,EditEventModal,Modal,BaseButton}`, `Components/Form/*`, `Components/Icons/*`
@@ -124,10 +124,10 @@ Local passwords were generated on 2026-11-13, live passwords on 2026-11-16; both
 the PDF) only when `APP_ENV=local`.
 
 ### Tests
-`herd php artisan test --testsuite=Feature` (there is no `tests/Unit`) – 23 tests: page props/privacy, multi-person
+`herd php artisan test --testsuite=Feature` (there is no `tests/Unit`) – 20 tests: page props/privacy, multi-person
 signup + cookie, validation, own-entry editing, guests can't edit/delete others, admin edit/delete, event update
 permissions, login/logout, admin seeder, confirmation mails + signed edit link, digest (window, recipients, skip
-when empty), flush.
+when empty).
 
 ## Done
 
@@ -143,14 +143,15 @@ when empty), flush.
 - [x] Confirmation email with "Eintrag bearbeiten" link (opens the edit modal) + daily 18:00 digest to `MAIL_TO`
 - [x] Emails styled like the page (Inter, white, left-aligned, single-line rows, answers flush right)
 - [x] Empty attendee lists are hidden ("zugesagt" incl. Total only shows with entries)
-- [x] `attendees:flush` for testing on live
+- [x] `attendees:flush` for testing on live – used on 2026-11-16 (4 test entries deleted, DB backup
+  `database.sqlite.bak-20261116-150037` on the server), then removed
 - [x] `deploy.sh` + live on https://weihnachtsessen.wbg.ch (2026-11-16): production `.env`, Hostpoint SMTP as
   weihnachtsessen@wbg.ch (login verified), `MAIL_TO="ms@wbg.ch"`, cron for `schedule:run`, admins seeded
 - [x] Favicon from the client (`public/favicon.svg`, line-art "26", olive) + `favicon.ico` (16/32/48) and
   `apple-touch-icon.png` (180, on white), linked in `resources/views/app.blade.php` (2026-11-16, `84b617a`)
 - [x] All commits up to `dff3a83` deployed with `./deploy.sh` (2026-11-16)
 - [x] Client feedback 2026-11-16: button «Weitere Person hinzufügen», attendee lists sorted by last name A–Z
-  (`bb222db`, not yet deployed). Non-breaking spaces in the header dropped – it's admin-edited content
+  (`bb222db`, deployed). Non-breaking spaces in the header dropped – it's admin-edited content
 
 ## Open questions / not designed (decisions taken – see `NOTES.md`)
 
@@ -167,9 +168,8 @@ when empty), flush.
 ## Possible next steps
 
 - Clarify the open questions above with the client
-- Test on live: sign up with a real address, check confirmation email + edit link, run the digest by hand,
-  then `attendees:flush` before handing over
-- Remove `attendees:flush` once real guests sign up
+- Test on live: sign up with a real address, check confirmation email + edit link, run the digest by hand
+  (delete the test entry afterwards via the admin)
 - Decide whether `MAIL_TO` stays ms@wbg.ch or goes to bf@wbg.ch; optionally Reply-To on confirmations
 - The first-run part of `deploy.sh` was fixed for FreeBSD but not re-tested on a fresh install
 - Check the favicon in a real browser tab: the fine lines blur at 16–32px; if too faint, ask the client for a
